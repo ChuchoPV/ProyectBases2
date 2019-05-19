@@ -1,26 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Paper from "@material-ui/core/Paper";
+import { Button, Row } from "react-bootstrap";
+import Students from './Components/students.jsx';
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    mode: null
+  };
+
+  render() {
+    const { mode } = this.state;
+
+    return (
+      <div>
+        {mode === null ? (
+          <Paper
+            style={{
+              margin: "auto",
+              marginTop: 150,
+              width: 400,
+              height: 200,
+              textAlign: "center",
+              paddingTop: 80
+            }}
+          >
+            <div>
+              <Button onClick={() => this.setState({ mode: "proveedores" })}>
+                Proveedores
+              </Button>{" "}
+              &nbsp;
+              <Button>Clientes</Button>&nbsp;
+              <Button>Pedidos</Button>&nbsp;
+            </div>
+          </Paper>
+        ) : null}
+        {mode === "proveedores" ? (
+          <div style={{ marginTop: 20, marginLeft: 40, marginRight: "auto" }}>
+            <Row>
+              <Button
+                variant="info"
+                onClick={() => this.setState({ mode: null })}
+              >
+                Regresar
+              </Button>
+            </Row>
+            <Row style={{marginTop : 20}}>
+              <Students></Students>
+            </Row>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 }
 
 export default App;
