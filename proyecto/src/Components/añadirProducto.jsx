@@ -3,9 +3,10 @@ import $ from "jquery";
 import { Table, Button } from "react-bootstrap";
 
 const INITIAL_STATE = {
-  id: "",
-  nombre: "",
-  apellido: ""
+  idProducto: "",
+  idProveedor: "",
+  producto: "",
+  precio : ""
 };
 
 class Añadir extends React.Component {
@@ -16,20 +17,21 @@ class Añadir extends React.Component {
   post = e => {
     // data in the form
     var form_data = {
-      id: this.state.id,
-      nombre: this.state.nombre,
-      apellido: this.state.apellido
+      idProducto: this.state.idProducto,
+      idProveedor: this.state.idProveedor,
+      producto: this.state.producto,
+      precio : this.state.precio
     };
 
     // submit form data to api
     $.ajax({
-      url: "http://localhost/~chucho/phpBases2/createStudent.php",
+      url: "http://localhost/~chucho/phpBases2/createProducto.php",
       type: "POST",
       data: JSON.stringify(form_data),
       success: function(response) {
         this.setState({ ...INITIAL_STATE });
         alert(response["message"]);
-        this.props.changeMode("proveedores");
+        this.props.changeMode("productos");
         window.location.reload();
       }.bind(this),
       error: function(xhr, resp, text) {
@@ -44,48 +46,67 @@ class Añadir extends React.Component {
 
   render() {
     const disable =
-      this.state.id === "" ||
-      this.state.nombre === "" ||
-      this.state.apellido === "";
+      this.state.idProducto === "" ||
+      this.state.idProveedor === "" ||
+      this.state.producto === "" ||
+      this.state.precio === "" ;
+
     return (
       <div>
         <Table style={{ width: 400 }} striped bordered hover>
           <tbody>
             <tr>
-              <td>ID</td>
+              <td>ID Prodcuto</td>
               <td>
                 <input
                   type="text"
-                  value={this.state.id}
+                  value={this.state.idProducto}
                   numeric
                   onChange={e => {
                     if (/^-?\d*$/.test(e.target.value)) {
-                      this.setState({ id: e.target.value });
+                      this.setState({ idProducto: e.target.value });
                     }
                   }}
                 />
               </td>
             </tr>
             <tr>
-              <td>Nombre</td>
+              <td>ID Proveedor</td>
               <td>
                 <input
                   type="text"
-                  value={this.state.nombre}
+                  value={this.state.idProveedor}
+                  numeric
                   onChange={e => {
-                    this.setState({ nombre: e.target.value });
+                    if (/^-?\d*$/.test(e.target.value)) {
+                      this.setState({ idProveedor: e.target.value });
+                    }
                   }}
                 />
               </td>
             </tr>
             <tr>
-              <td>Apellido</td>
+              <td>Producto</td>
               <td>
                 <input
                   type="text"
-                  value={this.state.apellido}
+                  value={this.state.producto}
                   onChange={e => {
-                      this.setState({ apellido: e.target.value });
+                    this.setState({ producto: e.target.value });
+                  }}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Precio</td>
+              <td>
+                <input
+                  type="text"
+                  value={this.state.precio}
+                  onChange={e => {
+                    if (/^-?\d*[.,]?\d*$/.test(e.target.value)) {
+                      this.setState({ precio: e.target.value });
+                    }
                   }}
                 />
               </td>

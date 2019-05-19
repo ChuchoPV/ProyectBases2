@@ -1,7 +1,7 @@
 import React from "react";
 import $ from "jquery";
 import { Table, Button } from "react-bootstrap";
-import Anadir from "./añadir.jsx";
+import Anadir from "./añadirProveedor.jsx";
 
 class Students extends React.Component {
   state = {
@@ -10,25 +10,24 @@ class Students extends React.Component {
 
   delete = id => {
     $.ajax({
-      url: "http://localhost/~chucho/phpBases2/deleteStudent.php",
-      type : "POST",
-      data : JSON.stringify({'id' : id}),
-      success : function(response) {
-        alert(response['message'])
-        window.location.reload()
+      url: "http://localhost/~chucho/phpBases2/deleteProveedores.php",
+      type: "POST",
+      data: JSON.stringify({ id: id }),
+      success: function(response) {
+        alert(response["message"]);
+        window.location.reload();
       },
-      error: function(xhr, resp, text, response){
-          // show error in console
-          console.log(xhr, resp, text);
-          alert(response['message'],text)
+      error: function(xhr, resp, text, response) {
+        // show error in console
+        console.log(xhr, resp, text);
+        alert(response["message"], text);
       }
-  });
-
+    });
   };
 
   componentDidMount() {
     this.serverRequest = $.get(
-      "http://localhost/~chucho/phpBases2/readStudent.php",
+      "http://localhost/~chucho/phpBases2/readProveedores.php",
       function(products) {
         this.setState({
           students: products.records
@@ -45,21 +44,24 @@ class Students extends React.Component {
   render() {
     return (
       <div>
-        {this.props.mode === "proveedores" ? (
+        {this.state.students.length !== 0 &&
+        this.props.mode === "proveedores" ? (
           <Table style={{ width: 700 }} striped bordered hover>
             <thead>
               <th>ID</th>
               <th>Nombre</th>
-              <th>Apellido</th>
+              <th>País</th>
+              <th>Dirección</th>
               <th />
             </thead>
             <tbody>
               {this.state.students.map(key => {
                 return (
                   <tr>
-                    <td>{key.id}</td>
+                    <td>{key.idProveedor}</td>
                     <td>{key.nombre}</td>
-                    <td>{key.apellido}</td>
+                    <td>{key.pais}</td>
+                    <td>{key.direccion}</td>
                     <td>
                       <Button
                         variant="danger"
@@ -68,7 +70,7 @@ class Students extends React.Component {
                             "Seguro que desea eliminar este elemento"
                           );
                           if (confirm) {
-                            this.delete(key.id);
+                            this.delete(key.idProveedor);
                           }
                         }}
                       >
