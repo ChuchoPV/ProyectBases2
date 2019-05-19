@@ -1,12 +1,16 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
 import { Button, Row } from "react-bootstrap";
-import Students from './Components/students.jsx';
+import Students from "./Components/students.jsx";
 import "./App.css";
 
 class App extends React.Component {
   state = {
-    mode: null
+    mode: "null"
+  };
+
+  changeMode = mode => {
+    this.setState({ mode });
   };
 
   render() {
@@ -14,7 +18,7 @@ class App extends React.Component {
 
     return (
       <div>
-        {mode === null ? (
+        {mode === "null" ? (
           <Paper
             style={{
               margin: "auto",
@@ -35,18 +39,32 @@ class App extends React.Component {
             </div>
           </Paper>
         ) : null}
-        {mode === "proveedores" ? (
+        {mode.includes("proveedores") ? (
           <div style={{ marginTop: 20, marginLeft: 40, marginRight: "auto" }}>
             <Row>
               <Button
                 variant="info"
-                onClick={() => this.setState({ mode: null })}
+                onClick={() => {
+                  if (mode === "proveedores") {
+                    this.setState({ mode: "null" });
+                  } else {
+                    this.setState({ mode: "proveedores" });
+                  }
+                }}
               >
                 Regresar
-              </Button>
+              </Button>{" "}
+              &nbsp;
+              {mode !== "proveedoresCrear" ? (
+                <Button
+                  onClick={() => this.setState({ mode: "proveedoresCrear" })}
+                >
+                  Añadir
+                </Button>
+              ) : null}
             </Row>
-            <Row style={{marginTop : 20}}>
-              <Students></Students>
+            <Row style={{ marginTop: 20 }}>
+              <Students changeMode={this.changeMode} mode={this.state.mode} />
             </Row>
           </div>
         ) : null}
